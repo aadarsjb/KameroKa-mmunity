@@ -1,6 +1,5 @@
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-// 1. GLOBAL INITIALIZATION
 if (history.scrollRestoration) {
   history.scrollRestoration = "manual";
 }
@@ -12,13 +11,14 @@ const initExperience = () => {
   const cursor = document.getElementById("cursor");
   const navIndex = document.querySelector(".nav-idx");
 
+  gsap.set(container, { z: 0.01, force3D: true });
+
   /**
-   * 2. LOADER MODULE
-   * Handles the intro sequence and circular wipe exit.
+   * 1. LOADER
    */
   const masterTl = gsap.timeline();
   masterTl
-    .to(".progress-bar", { width: "100%", duration: 0.8, ease: "power2.inOut" })
+    .to(".progress-bar", { width: "100%", duration: 0.8 })
     .to(".loader-logo", { y: -20, opacity: 0, duration: 0.5 })
     .to(".loader", {
       clipPath: "circle(0% at 50% 50%)",
@@ -30,17 +30,16 @@ const initExperience = () => {
     });
 
   /**
-   * 3. CORE SCROLL ENGINE
-   * Maps vertical scroll to the 5 horizontal panels.
+   * 2. CORE ENGINE
    */
-  const scrollTween = gsap.to(panels, {
+  let scrollTween = gsap.to(panels, {
     xPercent: -100 * (panels.length - 1),
     ease: "none",
     scrollTrigger: {
       trigger: ".main-container",
       pin: true,
-      scrub: 1,
-      end: () => "+=" + (container.offsetWidth - window.innerWidth),
+      scrub: 0.5,
+      end: () => "+=" + container.offsetWidth,
       invalidateOnRefresh: true,
       onUpdate: (self) => {
         const currentSection =
@@ -51,23 +50,60 @@ const initExperience = () => {
   });
 
   /**
-   * 4. ANIMATION REVEALS
-   * Triggered as each section enters the horizontal viewport.
+   * 3. BACK TO TOP & NAV GLIDE (RE-ENGINEERED)
+   */
+  const glideTo = (position) => {
+    gsap.to(window, {
+      scrollTo: { y: position }, // Explicit vertical axis
+      duration: 2,
+      ease: "expo.inOut",
+      overwrite: true,
+    });
+  };
+
+  // Improved Top Button Selector
+  const topBtn = document.querySelector(".cell-top");
+  if (topBtn) {
+    // Add pointer-events style via JS to ensure it's clickable
+    topBtn.style.pointerEvents = "auto";
+    topBtn.style.cursor = "none"; // Keeps your custom cursor look
+
+    topBtn.addEventListener("click", (e) => {
+      console.log("Back to Top Clicked"); // Debug check
+      glideTo(0);
+    });
+  }
+
+  // Navigation links
+  document.querySelectorAll(".nav-link").forEach((link) => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const index = parseInt(link.getAttribute("data-index"));
+      const totalScroll = container.offsetWidth;
+      const sectionWidth = totalScroll / (panels.length - 1);
+      const targetScroll =
+        scrollTween.scrollTrigger.start + index * sectionWidth;
+      glideTo(targetScroll);
+    });
+  });
+
+  /**
+   * 4. REVEALS
    */
   panels.forEach((section) => {
     const revealElements = section.querySelectorAll(".reveal");
     if (revealElements.length > 0) {
       gsap.from(revealElements, {
-        y: 100,
-        rotate: 5,
+        y: 80,
         opacity: 0,
+        rotate: 3,
+        duration: 1,
         stagger: 0.1,
-        duration: 1.2,
-        ease: "power4.out",
+        ease: "power3.out",
         scrollTrigger: {
           trigger: section,
           containerAnimation: scrollTween,
-          start: "left 80%",
+          start: "left 90%",
           toggleActions: "play none none reverse",
         },
       });
@@ -75,20 +111,14 @@ const initExperience = () => {
   });
 
   /**
-   * 5. INTERACTIVE & CURSOR MODULE
-   * Manages smooth cursor following and hover scaling.
+   * 5. CURSOR
    */
   window.addEventListener("mousemove", (e) => {
-    gsap.to(cursor, {
-      x: e.clientX,
-      y: e.clientY,
-      duration: 0.15,
-      ease: "power2.out",
-    });
+    gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1 });
   });
 
   const interactiveSelectors =
-    ".hero-title, .nav-idx, .big-type, .lorem, .brand, .submit-btn, input, label, .bento-item a, .cell-top";
+    ".hero-title, .nav-idx, .big-type, .lorem, .brand, .submit-btn, input, label, .nav-link, .cell-top, .bento-item a";
   document.querySelectorAll(interactiveSelectors).forEach((target) => {
     target.addEventListener("mouseenter", () =>
       cursor.classList.add("cursor-grow"),
@@ -99,31 +129,11 @@ const initExperience = () => {
   });
 
   /**
-   * 6. FORM & MAGNETIC INTERACTIONS
-   * Tactile feedback for the application section.
-   */
-  const setupMagnetic = (btn) => {
-    if (!btn) return;
-    btn.addEventListener("mousemove", (e) => {
-      const rect = btn.getBoundingClientRect();
-      const x = (e.clientX - rect.left - rect.width / 2) * 0.4;
-      const y = (e.clientY - rect.top - rect.height / 2) * 0.4;
-      gsap.to(btn, { x, y, duration: 0.3 });
-    });
-    btn.addEventListener("mouseleave", () => {
-      gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.3)" });
-    });
-  };
-  setupMagnetic(document.querySelector(".submit-btn"));
-
-  /**
-   * 7. THREE.JS (WEBGL) MODULE
-   * Renders the glass-style TorusKnot background.
+   * 6. THREE.JS (SMART RENDER)
    */
   const initThree = () => {
     const canvasContainer = document.getElementById("three-canvas");
     if (!canvasContainer) return;
-
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       75,
@@ -131,49 +141,28 @@ const initExperience = () => {
       0.1,
       1000,
     );
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+    renderer.setPixelRatio(1);
     renderer.setSize(window.innerWidth, window.innerHeight);
     canvasContainer.appendChild(renderer.domElement);
-
-    const geo = new THREE.TorusKnotGeometry(10, 3, 160, 20);
-    const mat = new THREE.MeshPhysicalMaterial({
-      color: 0xffffff,
-      metalness: 0.2,
-      roughness: 0.1,
-      transmission: 1.0,
-      thickness: 1,
+    const geo = new THREE.TorusKnotGeometry(10, 3, 80, 12);
+    const mat = new THREE.MeshBasicMaterial({
+      color: 0x333333,
       wireframe: true,
-      transparent: true,
-      opacity: 0.15,
     });
-
     const mesh = new THREE.Mesh(geo, mat);
     scene.add(mesh);
-
-    const pointLight = new THREE.PointLight(0xffffff, 1.5);
-    pointLight.position.set(20, 30, 40);
-    scene.add(pointLight, new THREE.AmbientLight(0xffffff, 0.4));
-
     camera.position.z = 40;
-
     const animate = () => {
+      if (window.scrollY < 500) {
+        mesh.rotation.y += 0.005;
+        renderer.render(scene, camera);
+      }
       requestAnimationFrame(animate);
-      mesh.rotation.y += 0.002;
-      mesh.rotation.x += 0.001;
-      renderer.render(scene, camera);
     };
     animate();
-
-    window.addEventListener("resize", () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
   };
   initThree();
 };
 
-// 8. FINAL EXECUTION
 window.addEventListener("load", initExperience);

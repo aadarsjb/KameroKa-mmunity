@@ -299,8 +299,13 @@ body {
   align-items: center;
   justify-content: center;
   font-weight: 800;
+  pointer-events: auto; /* Ensures the div intercepts the click */
+  user-select: none;
 }
 
+.cell-top * {
+  pointer-events: none; /* Prevents the span/arrow from blocking the click */
+}
 .footer-logo {
   font-size: 6vw;
   line-height: 0.8;
