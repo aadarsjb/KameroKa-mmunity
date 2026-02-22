@@ -97,13 +97,13 @@ const initExperience = () => {
         y: 80,
         opacity: 0,
         rotate: 3,
-        duration: 1,
-        stagger: 0.1,
-        ease: "power3.out",
+        duration: 1.2,
+        stagger: 0.15,
+        ease: "power4.out",
         scrollTrigger: {
           trigger: section,
           containerAnimation: scrollTween,
-          start: "left 90%",
+          start: "left 80%",
           toggleActions: "play none none reverse",
         },
       });

@@ -339,6 +339,8 @@ body {
   margin-bottom: 10px;
 }
 
+
+
 /* Responsive tweaks for the grid */
 @media (max-width: 900px) {
   .bento-grid {
@@ -349,3 +351,4 @@ body {
     height: auto;
   }
 }
+
