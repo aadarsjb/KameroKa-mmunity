@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>KAMERO | CEO</title>
+    <title>The KA-MMUNITY Experience</title>
     <link rel="stylesheet" href="style.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Space+Mono&family=Syne:wght@800&display=swap"
@@ -29,7 +29,7 @@
         <section id="hero" class="panel">
           <div id="three-canvas" class="canvas-bg"></div>
           <div class="content">
-            <h1 class="hero-title">
+            <h1 class="hero-title" id="hero-title">
               KAMERO <br />
               KA-MMUNITY
             </h1>
@@ -38,7 +38,7 @@
 
         <section id="who" class="panel">
           <div class="inner-grid">
-            <h2 class="reveal">THE ARCHITECT</h2>
+            <h2 class="reveal">THE MISSION</h2>
             <p class="lorem">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim
               ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
@@ -58,9 +58,78 @@
           </div>
         </section>
 
-        <section id="stand" class="panel">
+        <section id="join" class="panel vh-100">
+          <div class="form-container">
+            <h2 class="reveal form-title">JOIN THE<br />COLLECTIVE</h2>
+            <form class="kmr-form">
+              <div class="input-group">
+                <input type="text" id="name" required placeholder=" " />
+                <label for="name">FULL NAME</label>
+              </div>
+              <div class="input-group">
+                <input type="email" id="email" required placeholder=" " />
+                <label for="email">EMAIL ADDRESS</label>
+              </div>
+              <div class="input-row">
+                <div class="input-group">
+                  <input type="tel" id="phone" required placeholder=" " />
+                  <label for="phone">PHONE</label>
+                </div>
+                <div class="input-group">
+                  <input type="text" id="address" required placeholder=" " />
+                  <label for="address">CITY / ADDRESS</label>
+                </div>
+              </div>
+              <button type="submit" class="submit-btn mag-btn">
+                SUBMIT APPLICATION
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <!-- <section id="stand" class="panel">
           <div class="ethos-container">
             <h2 class="reveal big-type">BORN<br />FOR THE<br />STREET</h2>
+          </div>
+        </section> -->
+
+        <section id="footer" class="panel vh-100">
+          <div class="bento-grid">
+            <div class="bento-item cell-main">
+              <h2 class="reveal footer-logo">BORN FOR<br />THE STREET</h2>
+            </div>
+
+            <div class="bento-item cell-links">
+              <h3 class="bento-label">NAVIGATION</h3>
+              <div class="bento-link-list">
+                <a href="#hero">HOME</a>
+                <a href="#who">MISSION</a>
+                <a href="#built">LEGACY</a>
+                <a href="#join">COLLECTIVE</a>
+              </div>
+            </div>
+
+            <div class="bento-item cell-social">
+              <h3 class="bento-label">SOCIAL</h3>
+              <div class="bento-link-list">
+                <a href="#">INSTAGRAM</a>
+                <a href="#">TWITTER / X</a>
+                <a href="#">DISCORD</a>
+              </div>
+            </div>
+
+            <div class="bento-item cell-info">
+              <p>©2026 KAMERO LTD.</p>
+              <p>ALL RIGHTS RESERVED.</p>
+            </div>
+
+            <div
+              class="bento-item cell-top"
+              onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+            >
+              <span class="arrow">↑</span>
+              <span>TOP</span>
+            </div>
           </div>
         </section>
       </div>

@@ -47,29 +47,29 @@ body {
 
 /* HUD */
 .hud {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 30px 50px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 1000;
-    mix-blend-mode: difference;
-    font-size: 0.7rem;
-    letter-spacing: 0.3em;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 30px 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  mix-blend-mode: difference;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
 }
 
 .nav-links {
-    display: flex;
-    gap: 40px;
+  display: flex;
+  gap: 40px;
 }
 
 .nav-item {
-    position: relative;
-    overflow: hidden;
-    height: 1.2em;
+  position: relative;
+  overflow: hidden;
+  height: 1.2em;
 }
 /* HORIZONTAL ENGINE */
 .main-container {
@@ -79,7 +79,7 @@ body {
 .horizontal-scroll {
   display: flex;
   flex-wrap: nowrap;
-  width: 400vw; /* 4 sections * 100vw */
+  width: 500vw; /* 5 sections * 100vw */
 }
 
 .panel {
@@ -115,16 +115,100 @@ body {
   margin-bottom: 20px;
 }
 .big-type {
-    font-family: var(--font-h);
-    font-size: clamp(3rem, 18vh, 22vh); /* Slightly reduced to guarantee safety */
-    line-height: 0.8;
-    text-align: center;
-    text-transform: uppercase;
-    width: 100%;
-    font-weight: 900;
-    letter-spacing: -0.05em;
-    /* Subtle text shadow for depth */
-    text-shadow: 10px 10px 0px rgba(255,255,255,0.02);
+  font-family: var(--font-h);
+  font-size: clamp(3rem, 18vh, 22vh); /* Slightly reduced to guarantee safety */
+  line-height: 0.8;
+  text-align: center;
+  text-transform: uppercase;
+  width: 100%;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  /* Subtle text shadow for depth */
+  text-shadow: 10px 10px 0px rgba(255, 255, 255, 0.02);
+}
+
+/* New Form Styles */
+.form-container {
+  width: 100%;
+  max-width: 900px;
+  padding: 0 5%;
+}
+
+.form-title {
+  font-size: 4vw;
+  line-height: 1;
+  margin-bottom: 3rem;
+}
+
+.kmr-form {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.input-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.input-group {
+  position: relative;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transition: border-color 0.4s;
+}
+
+.input-group:focus-within {
+  border-color: var(--white);
+}
+
+.input-group input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--white);
+  padding: 15px 0;
+  font-family: var(--font-b);
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+.input-group label {
+  position: absolute;
+  top: 15px;
+  left: 0;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  pointer-events: none;
+  transition: all 0.4s ease;
+  opacity: 0.5;
+}
+
+/* Label floating logic */
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+  top: -15px;
+  font-size: 0.5rem;
+  opacity: 1;
+}
+
+.submit-btn {
+  align-self: flex-start;
+  background: var(--white);
+  color: var(--black);
+  border: none;
+  padding: 20px 50px;
+  font-family: var(--font-h);
+  font-weight: 800;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  cursor: none;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.submit-btn:hover {
+  transform: scale(1.05);
 }
 
 .canvas-bg {
@@ -137,21 +221,126 @@ body {
 }
 
 .cursor {
-    width: 12px;
-    height: 12px;
-    background: var(--white);
-    border-radius: 50%;
-    position: fixed;
-    pointer-events: none;
-    z-index: 10000;
-    mix-blend-mode: difference;
-    transition: width 0.3s, height 0.3s, background 0.3s;
+  width: 12px;
+  height: 12px;
+  background: var(--white);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 10000;
+  mix-blend-mode: difference;
+  transition:
+    width 0.3s,
+    height 0.3s,
+    background 0.3s;
 }
 
 /* Class to be toggled via JS on hover */
 .cursor-grow {
-    width: 80px;
-    height: 80px;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid var(--white);
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--white);
+}
+
+/* BENTO FOOTER STYLES */
+.bento-grid {
+  display: grid;
+  width: 100%;
+  height: 80vh; /* Keeps vertical breathing room within the 100vh panel */
+  margin: 0 5%;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 15px;
+  grid-template-areas:
+    "main main links social"
+    "main main info info"
+    "main main info info";
+}
+
+.bento-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition:
+    background 0.3s,
+    border 0.3s;
+}
+
+.bento-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.cell-main {
+  grid-area: main;
+  justify-content: center;
+}
+.cell-links {
+  grid-area: links;
+}
+.cell-social {
+  grid-area: social;
+}
+.cell-info {
+  grid-area: info;
+  flex-direction: row;
+  align-items: flex-end;
+  font-size: 0.7rem;
+  opacity: 0.5;
+}
+.cell-top {
+  grid-column: 4;
+  grid-row: 3;
+  cursor: none;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+}
+
+.footer-logo {
+  font-size: 6vw;
+  line-height: 0.8;
+  margin-bottom: 0;
+}
+.bento-label {
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.bento-link-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.bento-link-list a {
+  text-decoration: none;
+  color: var(--white);
+  font-family: var(--font-h);
+  font-size: 1.2rem;
+  transition: opacity 0.3s;
+}
+.bento-link-list a:hover {
+  opacity: 0.5;
+}
+
+.arrow {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+/* Responsive tweaks for the grid */
+@media (max-width: 900px) {
+  .bento-grid {
+    grid-template-areas:
+      "main main main main"
+      "links links social social"
+      "info info info info";
+    height: auto;
+  }
 }
